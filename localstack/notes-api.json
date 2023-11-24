@@ -1,0 +1,41 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "lastUpdatedAt",
+      "AttributeType": "N"
+    }
+  ],
+  "TableName": "notes-api-development",
+  "KeySchema": [
+    {
+      "KeyType": "HASH",
+      "AttributeName": "id"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "lastUpdatedAt-index",
+      "KeySchema": [
+        {
+          "AttributeName": "lastUpdatedAt",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "WriteCapacityUnits": 1,
+        "ReadCapacityUnits": 1
+      }
+    }
+  ],
+  "ProvisionedThroughput": {
+    "WriteCapacityUnits": 1,
+    "ReadCapacityUnits": 1
+  }
+}
