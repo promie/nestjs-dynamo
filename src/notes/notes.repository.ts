@@ -3,8 +3,11 @@ import {
   DynamoDBClient,
   ScanCommand,
   GetItemCommand,
+  PutItemCommand,
 } from '@aws-sdk/client-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
 import { Note } from './entities/note.entity';
+import { AttributeValue } from '@aws-sdk/client-dynamodb/dist-types/models';
 
 @Injectable()
 export class NotesRepository {
@@ -53,5 +56,30 @@ export class NotesRepository {
     }
 
     return undefined;
+  }
+
+  async upsertOne(data: Note) {
+    const item: any = {
+      noteId: data.noteId,
+      content: data.content,
+      createdAt: data.createdAt.getTime(),
+    };
+
+    if (data.title) {
+      item.title = data.title;
+    }
+
+    if (data.updatedAt) {
+      item.updatedAt = data.updatedAt.getTime();
+    }
+
+    const command = new PutItemCommand({
+      TableName: this.tableName,
+      Item: marshall(item),
+    });
+
+    const response = await this.client.send(command);
+
+    return response;
   }
 }
