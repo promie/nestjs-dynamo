@@ -15,8 +15,8 @@ export class NotesService {
     return this.repository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} note`;
+  findOne(id: string) {
+    return this.repository.findByNoteId(id);
   }
 
   update(id: number, updateNoteDto: UpdateNoteDto) {
