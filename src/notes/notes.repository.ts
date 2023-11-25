@@ -7,7 +7,6 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { Note } from './entities/note.entity';
-import { AttributeValue } from '@aws-sdk/client-dynamodb/dist-types/models';
 
 @Injectable()
 export class NotesRepository {
