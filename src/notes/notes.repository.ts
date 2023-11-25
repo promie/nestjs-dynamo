@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  ScanCommand,
+  GetItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { Note } from './entities/note.entity';
 
 @Injectable()
@@ -30,5 +34,24 @@ export class NotesRepository {
     }
 
     return result;
+  }
+
+  async findByNoteId(noteId: string) {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: {
+        noteId: {
+          S: noteId,
+        },
+      },
+    });
+
+    const response = await this.client.send(command);
+
+    if (response.Item) {
+      return Note.newInstanceFromDynamoDBObject(response.Item);
+    }
+
+    return undefined;
   }
 }
